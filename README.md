@@ -1,4 +1,10 @@
-# Headless Strike
+<h1 align="center">
+<br>
+<img src="logo.png">
+<br>
+Headless Strike
+</h1>
+
 Aggressorscript that turns the headless aggressor client into a (mostly) functional cobalt strike client.
 
 ## Usage
