@@ -95,6 +95,29 @@ The syntax is the same as in the GUI client. The only ones you should take note 
 - info - info about current beacon
 - sync_download - sync the teamserver downloads to local storage
 
+
+## Example
+```
+aggressor> 
+reload headless-strike.cna
+[+] Reload headless-strike.cna
+
+█▀▀ █▀█ █▄▄ ▄▀█ █░░ ▀█▀ █▀ ▀█▀ █▀█ █ █▄▀ █▀▀
+█▄▄ █▄█ █▄█ █▀█ █▄▄ ░█░ ▄█ ░█░ █▀▄ █ █░█ ██▄  (headless)
+https://github.com/CodeXTF2/cobaltstrike-headless
+
+beacons
+[+] Listing beacons
+______________________
+|    beacon id       |
+1615823462 ( x64 ) ⛓ | IEUser @ MSEDGEWIN10 ( runonce.exe - 3228 ) | last: 49s | listener https  (via 1100299032)
+1100299032 ( x64 )  | IEUser @ MSEDGEWIN10 ( beacon.exe - 7048 ) | last: 49s | listener https
+
+
+use 1615823462
+[+] Interacting with beacon 1615823462
+```
+
 ## Why did I make this?
 I had some fun recently with nethunter (mobile kali) and thought it would be a fun thing to be able to task beacons while not at a computer, such as if a slack/discord beacon notification came in while the operator was outside. This was my (hacky) solution :D Feel free to submit issues or PRs etc.
 
